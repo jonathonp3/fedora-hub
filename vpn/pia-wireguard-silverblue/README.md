@@ -25,9 +25,9 @@ Run the automatic deploy script:
 bash fedora-hub/vpn/pia-wireguard-silverblue/pia-deploy.sh
 ```
 
-### Manual Installation (Recommended for first time usage so you understand the process):
+## Manual Installation (Recommended for first time usage so you understand the process):
 
-## Phase 1: Container Setup (Toolbox)   
+### Phase 1: Container Setup (Toolbox)   
 
 1. Create the 'apps' toolbox
 ```bash
@@ -58,7 +58,7 @@ sudo cp /etc/wireguard/pia.conf ~/pia.conf
 exit
 ```
 
-## Phase 2: Host Integration & Optimization
+### Phase 2: Host Integration & Optimization
 
 1. Take ownership of the file so your user can read it
 ```bash
@@ -87,7 +87,7 @@ nmcli connection modify pia ipv4.ignore-auto-dns yes
 nmcli connection up pia
 ```
 
-## Phase 3: Maintenance (Updating the IP)
+### Phase 3: Maintenance (Updating the IP)
 If the connection stops working, use the toolbox to find the latest active server.
 
 1. Get the newest server IP from the toolbox
