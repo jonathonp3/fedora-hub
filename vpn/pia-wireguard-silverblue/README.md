@@ -25,7 +25,7 @@ Run the automatic deploy script:
 bash fedora-hub/vpn/pia-wireguard-silverblue/pia-deploy.sh
 ```
 
-# Manual Installation (Recommended for first time usage so you understand the process):
+### Manual Installation (Recommended for first time usage so you understand the process):
 
 ## Phase 1: Container Setup (Toolbox)   
 
