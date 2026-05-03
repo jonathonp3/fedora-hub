@@ -22,7 +22,8 @@ git clone https://github.com/jonathonp3/fedora-hub.git
 Run the automatic deploy script:
 
 ```bash
-bash fedora-hub/vpn/pia-wireguard-silverblue/pia-deploy.sh
+cd fedora-hub
+bash vpn/pia-wireguard-silverblue/pia-deploy.sh
 ```
 
 ## Manual Installation (Recommended for first time usage so you understand the process):
@@ -51,15 +52,15 @@ cd manual-connections
 sudo ./run_setup.sh
 ```
 
-Answers to the interactive prompts:
+**Answers to the interactive prompts:**
+*   **Dedicated IP token?** → `n` (No)
+*   **Forwarding port?** → `n` (No)
+*   **Disable IPv6?** → `y` (Yes)
+*   **Manually select server?** → `y` (Yes)
+*   **Select Region:** → Choose **Melbourne** (usually `1`)
+*   **Custom Latency?** → Press **Enter** (default 50ms)
+*   **Force PIA DNS?** → `y` (Yes)
 
-    Dedicated IP token? → n (No)
-    Forwarding port? → n (No)
-    Disable IPv6? → y (Yes)
-    Manually select server? → y (Yes)
-    Select Region: → Choose Melbourne (usually 1)
-    Custom Latency? → Press Enter (default 50ms)
-    Force PIA DNS? → y (Yes)
 
 5. Export the generated config to your home directory
 (Since Toolbox shares your home folder, this is easy)
