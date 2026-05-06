@@ -221,7 +221,7 @@ https://www.privateinternetaccess.com/what-is-my-ip
 
 8. Reboot. It takes about 7 seconds to create a new connection with the latest ip address after a restart.
 
-Note if the PIA ip changes while you are using it or you left the computer on overnight in sleep mode just execute the script manually to renew it:
+Note if the PIA ip changes while you are using it or you left the computer on overnight in sleep mode, just execute the script manually to renew it:
 ```bash
 ~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
 ```
