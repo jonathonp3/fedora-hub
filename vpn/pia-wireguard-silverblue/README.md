@@ -118,5 +118,103 @@ nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowe
 nmcli connection up pia
 ```
 
+## 🤖 Advanced: Automation (Auto-start on Login)
+To have your VPN automatically refresh keys and connect silently whenever you restart:
+
+1. Create a Secure Credentials File
+Store your PIA login info so the script can read it headlessly.
+```bash
+nano ~/.pia-creds
+```
+add:
+```bash
+# Line 1: p0939480
+# Line 2: YourPassword
+```
+Set permissions
+```bash
+chmod 600 ~/.pia-creds
+```
+2. Configure Passwordless Sudo (Host)
+```bash
+sudo visudo -f /etc/sudoers.d/pia-vpn
+```Add the following line (Replace jonathon with your username):
+```bash
+jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+```
+
+3.  Create and Prepare the "Apps" Toolbox:
+
+Create the toolbox container
+toolbox create -c apps
+
+Enter the toolbox
+toolbox enter apps
+
+Install the required tools inside the container
+sudo dnf install git wireguard-tools jq curl -y
+
+Clone the PIA manual connections repository into your home folder
+git clone https://github.com/pia-foss/manual-connections.git
+
+Set up Passwordless Sudo INSIDE the container (Critical for automation)
+This allows the autostart script to run 'sudo ./run_setup.sh' without a prompt
+```bash
+sudo visudo
+```
+
+When visudo opens, scroll to the bottom and add this line:
+```bash
+jonathon ALL=(ALL) NOPASSWD: ALL
+```
+Save and exit (Ctrl+O, Enter, Ctrl+X), then to exit the toolbox type:
+```bash
+exit
+```
+
+4. Create the Systemd User Service
+```bash
+mkdir -p ~/.config/systemd/user/
+vim ~/.config/systemd/user/pia-vpn.service
+```
+Add the following (Change jonathon to your username):
+
+```bash
+[Unit]
+Description=Start PIA VPN on Login
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/var/home/jonathon/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+```
+
+5. Test the script:
+```bash
+~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+```
+
+6. Enable the Service. Connection should appear in gnome desktop
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now pia-vpn.service
+```
+
+7. Test vpn in the browser:
+```bash
+https://www.privateinternetaccess.com/what-is-my-ip
+```
+
+7. Reboot. It takes about 7 seconds to create a new connection with the latest ip address after a restart.
+
+Note if the PIA ip changes while you are using it or you left the computer on overnight in sleep mode just execute the script manually to renew it:
+```bash
+~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+```
 
 
