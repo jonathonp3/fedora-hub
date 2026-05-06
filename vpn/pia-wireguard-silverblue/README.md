@@ -226,4 +226,8 @@ Note if the PIA ip changes while you are using it or you left the computer on ov
 ~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
 ```
 
+To delete the pia connection
+```bash
+nmcli connection delete pia
+```
 
