@@ -219,17 +219,16 @@ systemctl --user enable --now pia-vpn.service
 https://www.privateinternetaccess.com/what-is-my-ip
 ```
 
-7. Reboot. It takes about 7 seconds to create a new connection with the latest ip address after a restart.
+8. Reboot. It takes about 7 seconds to create a new connection with the latest ip address after a restart.
 
 Note if the PIA ip changes while you are using it or you left the computer on overnight in sleep mode just execute the script manually to renew it:
 ```bash
 ~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
 ```
 
-8. If you want to remove the pia connection from network-manager:
+9. If you want to remove pia from network-manager:
 ```bash
 nmcli connection delete pia
 ```
-
 
 
