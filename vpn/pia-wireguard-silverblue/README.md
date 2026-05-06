@@ -146,16 +146,24 @@ jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/fed
 3.  Create and Prepare the "Apps" Toolbox:
 
 Create the toolbox container
+```bash
 toolbox create -c apps
+```
 
 Enter the toolbox
+```bash
 toolbox enter apps
+```
 
 Install the required tools inside the container
+```bash
 sudo dnf install git wireguard-tools jq curl -y
+```
 
 Clone the PIA manual connections repository into your home folder
+```bash
 git clone https://github.com/pia-foss/manual-connections.git
+```
 
 Set up Passwordless Sudo INSIDE the container (Critical for automation)
 This allows the autostart script to run 'sudo ./run_setup.sh' without a prompt
