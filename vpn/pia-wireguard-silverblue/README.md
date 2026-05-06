@@ -138,7 +138,8 @@ chmod 600 ~/.pia-creds
 2. Configure Passwordless Sudo (Host)
 ```bash
 sudo visudo -f /etc/sudoers.d/pia-vpn
-```Add the following line (Replace jonathon with your username):
+```
+Add the following line (Replace jonathon with your username):
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
 ```
