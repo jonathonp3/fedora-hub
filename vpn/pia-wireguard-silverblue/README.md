@@ -124,7 +124,7 @@ To have your VPN automatically refresh keys and connect silently whenever you re
 1. Create a Secure Credentials File
 Store your PIA login info so the script can read it headlessly.
 ```bash
-nano ~/.pia-creds
+vi ~/.pia-creds
 ```
 add:
 ```bash
