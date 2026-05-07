@@ -172,7 +172,7 @@ This allows the autostart script to run 'sudo ./run_setup.sh' without a prompt
 sudo visudo
 ```
 
-When visudo opens, scroll to the bottom and add this line:
+When visudo opens, scroll to the bottom and add this line. Replace jonathon with your username:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
@@ -184,7 +184,7 @@ exit
 4. Create the Systemd User Service
 ```bash
 mkdir -p ~/.config/systemd/user/
-vim ~/.config/systemd/user/pia-vpn.service
+vi ~/.config/systemd/user/pia-vpn.service
 ```
 Add the following (Change jonathon to your username):
 
