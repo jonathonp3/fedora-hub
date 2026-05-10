@@ -119,8 +119,9 @@ nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowe
 ```bash
 nmcli connection up pia
 ```
-<a id="automation-guide"></a>
-## 🤖 Advanced: Automation (Auto-start & Desktop Integration keeping your home directory clean)
+
+## <a id="automation-guide"></a> 🤖 Advanced: Automation (Auto-start & Desktop Integration keeping your home directory clean)
+
 
 To have your VPN automatically refresh keys and connect silently whenever you restart, and to have a "Renew" icon in your apps menu.
 1. Create a Secure Credentials File
