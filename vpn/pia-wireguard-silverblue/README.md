@@ -188,7 +188,7 @@ Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-For Bazzite Users (Distrobox)
+![Bazzite Users (Distrobox)](https://img.shields.io/badge/Bazzite%20Users%20%28Distrobox%29-blue)
 
 Create the hidden directory & distrobox:
 ```bash
