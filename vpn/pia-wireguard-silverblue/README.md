@@ -26,7 +26,7 @@ cd fedora-hub
 bash vpn/pia-wireguard-silverblue/pia-deploy.sh
 ```
 
-## Manual Installation (Recommended for first time usage so you understand the process):
+## Manual Installation (Recommended for first time usage so you understand the process. After that use "Advanced: Automation (Auto-start & Desktop Integration)"):
 
 ### Phase 1: Container Setup (Toolbox)   
 
@@ -118,76 +118,88 @@ nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowe
 nmcli connection up pia
 ```
 
-## 🤖 Advanced: Automation (Auto-start on Login)
-To have your VPN automatically refresh keys and connect silently whenever you restart:
+🤖 Advanced: Automation (Auto-start & Desktop Integration keeping your home directory clean)
 
+To have your VPN automatically refresh keys and connect silently whenever you restart, and to have a "Renew" icon in your apps menu.
 1. Create a Secure Credentials File
+
 Store your PIA login info so the script can read it headlessly.
+bash
 ```bash
 vi ~/.pia-creds
 ```
-add:
+
+Add your credentials (one per line):
 ```bash
-# Line 1: p0939480
-# Line 2: YourPassword
+p0939480
+YourPasswordHere
 ```
-Set permissions
+Set permissions:
 ```bash
 chmod 600 ~/.pia-creds
 ```
+
 2. Configure Passwordless Sudo (Host)
+Tell the host to allow the autostart script to manage the network without a password.
 ```bash
 sudo visudo -f /etc/sudoers.d/pia-vpn
 ```
 Add the following line (Replace jonathon with your username):
+text
 ```bash
-jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
+3. Create and Prepare the "Apps" Toolbox
 
-3.  Create and Prepare the "Apps" Toolbox:
+We use a permanent hidden directory to keep your home folder clean.
 
-Create the toolbox container
+a) Create the hidden directory & toolbox:
 ```bash
+mkdir -p ~/.opt/pia-manual
 toolbox create -c apps
 ```
-
-Enter the toolbox
+b) Enter toolbox and install requirements:
 ```bash
 toolbox enter apps
-```
-
-Install the required tools inside the container
-```bash
 sudo dnf install git wireguard-tools jq curl -y
 ```
-
-Clone the PIA manual connections repository into your home folder
+c) Clone the PIA scripts into the hidden folder:
 ```bash
-git clone https://github.com/pia-foss/manual-connections.git
+cd ~/.opt/pia-manual
+git clone https://github.com/pia-foss/manual-connections.git .
 ```
 
-Set up Passwordless Sudo INSIDE the container (Critical for automation)
-This allows the autostart script to run 'sudo ./run_setup.sh' without a prompt
+d) Set up Passwordless Sudo INSIDE the container:
+bash
 ```bash
 sudo visudo
 ```
-
-When visudo opens, scroll to the bottom and add this line. Replace jonathon with your username:
+Inside visudo, add to the bottom (replace jonathon with your username):
+text
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-Save and exit (Ctrl+O, Enter, Ctrl+X), then to exit the toolbox type:
+Save and exit, then type exit to return to the host.
+
+4. Deploy the Autostart Script
+
+Copy the script from the repository to your hidden .opt folder:
 ```bash
-exit
+cp ~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh /var/home/jonathon/.opt/pia-manual/
+```
+Make the script executable
+```bash
+chmod +x /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
 
-4. Create the Systemd User Service
+5. Create the Systemd User Service
+
+This triggers the script automatically every time you log into your desktop.
 ```bash
 mkdir -p ~/.config/systemd/user/
 vi ~/.config/systemd/user/pia-vpn.service
 ```
-Add the following (Change jonathon to your username):
-
+Add the following configuration:
 ```bash
 [Unit]
 Description=Start PIA VPN on Login
@@ -196,39 +208,52 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/var/home/jonathon/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+ExecStart=/var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 RemainAfterExit=yes
 
 [Install]
 WantedBy=default.target
 ```
+6. Create the Desktop "Renew" Launcher
 
-5. Test the script:
+This adds a "Renew PIA VPN" icon to your GNOME applications menu.
+bash
 ```bash
-~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
+mkdir -p ~/.local/share/applications/
+vi ~/.local/share/applications/pia-renew.desktop
+```
+Add the following configuration:
+```bash
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Renew PIA VPN
+Comment=Refresh WireGuard keys and reconnect
+Exec=sh -c '/var/home/jonathon/.opt/pia-manual/pia-autostart.sh; sleep 10'
+Icon=piavpn
+Terminal=true
+Categories=Network;VPN;
 ```
 
-6. Enable the Service. Connection should appear in gnome desktop
+7. Install the Icon
+Ensure the custom icon is in a location GNOME can find:
+```bash
+mkdir -p ~/.local/share/icons/hicolor/256x256/apps/
+cp ~/fedora-hub/vpn/pia-wireguard-silverblue/piavpn.png ~/.local/share/icons/hicolor/256x256/apps/
+gtk-update-icon-cache ~/.local/share/icons/hicolor
+```
+8. Enable and Test
+a) Reload and enable the service
 ```bash
 systemctl --user daemon-reload
 systemctl --user enable --now pia-vpn.service
 ```
-
-7. Test vpn in the browser:
+b) Test the script manually from the hidden path
 ```bash
-https://www.privateinternetaccess.com/what-is-my-ip
+~/.opt/pia-manual/pia-autostart.sh
 ```
+9. Maintenance & Notes
 
-8. Reboot. It takes about 7 seconds to create a new connection with the latest ip address after a restart.
+IP Refresh: If the IP changes while using the computer, simply find the "Renew PIA VPN" app in your menu and click it. It will open a terminal, show the fresh handshake, and close after 10 seconds.
 
-Note if the PIA ip changes while you are using it or you left the computer on overnight in sleep mode, just execute the script manually to renew it:
-```bash
-~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh
-```
-
-9. If you want to remove pia from network-manager:
-```bash
-nmcli connection delete pia
-```
-
-
+Total Tidiness: All engine files live in ~/.opt/pia-manual/ and your configuration is hidden at ~/.pia.conf. Your home directory remains pristine.
