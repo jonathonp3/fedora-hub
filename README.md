@@ -7,5 +7,6 @@ Personal collection of detailed Fedora guides, notes, and scripts. Clear, step�
 *   **[PIA WireGuard for Silverblue](./vpn/pia-wireguard-silverblue)**: A "Stateless" deployment method using temporary Toolbox containers.
     *   **Highlights**: Fully automated, 250Mbps+ MTU optimization, and DNS leak protection.
     *   **Best for**: Fedora Silverblue, Kinoite, and other immutable variants.
-    *   🤖 **[Direct Link: Automation & Auto-start Setup](./vpn/pia-wireguard-silverblue#automation-guide)**
+    * 🤖 **[Direct Link: Automation & Auto-start Setup](./vpn/pia-wireguard-silverblue#automation-guide)**
+
 
