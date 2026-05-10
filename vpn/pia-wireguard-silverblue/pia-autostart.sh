@@ -62,8 +62,25 @@ else
     sudo -n nmcli connection up pia 2>/dev/null
 fi
 
-# 6. Final Verification
+# 6. Final Verification & Success Message
+echo "⏳ Verifying connection..."
 sleep 5
-sudo -n wg show pia | grep -E "endpoint|handshake|transfer"
-curl --connect-timeout 10 -s ipinfo.io | grep -E "ip|city|org"
+
+# Check for data received in the handshake
+RECEIVED=$(sudo -n wg show pia | grep "transfer" | awk '{print $2}')
+
+echo "=========================================="
+if [[ "$RECEIVED" != "0" && -n "$RECEIVED" ]]; then
+    echo "🎉 SUCCESS: PIA VPN IS ACTIVE"
+    echo "------------------------------------------"
+    # Show clean handshake info
+    sudo -n wg show pia | grep -E "endpoint|handshake|transfer"
+    echo "------------------------------------------"
+    # Show human-readable IP Info
+    curl --connect-timeout 10 -s ipinfo.io | jq -r '"📍 Location: \(.city), \(.region)\n🌐 Public IP: \(.ip)\n🏢 Provider: \(.org)"'
+else
+    echo "❌ ERROR: VPN connected but no data received."
+    echo "Try running the script again."
+fi
+echo "=========================================="
 
