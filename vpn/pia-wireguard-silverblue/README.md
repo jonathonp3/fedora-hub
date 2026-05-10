@@ -145,7 +145,6 @@ Tell the host to allow the autostart script to manage the network without a pass
 sudo visudo -f /etc/sudoers.d/pia-vpn
 ```
 Add the following line (Replace jonathon with your username):
-text
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
@@ -217,7 +216,6 @@ WantedBy=default.target
 6. Create the Desktop "Renew" Launcher
 
 This adds a "Renew PIA VPN" icon to your GNOME applications menu.
-bash
 ```bash
 mkdir -p ~/.local/share/applications/
 vi ~/.local/share/applications/pia-renew.desktop
