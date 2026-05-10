@@ -189,7 +189,8 @@ Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>Bazzite Users (Distrobox)</text></svg>" alt="Bazzite Users (Distrobox)"/>
+<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>For Bazzite Users (Distrobox)</text></svg>" alt="For Bazzite Users (Distrobox)"/>
+
 
 Create the hidden directory & distrobox:
 ```bash
