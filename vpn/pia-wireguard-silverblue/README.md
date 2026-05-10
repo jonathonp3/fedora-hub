@@ -148,15 +148,15 @@ Tell the host to allow the autostart script to manage the network without a pass
 ```bash
 sudo visudo -f /etc/sudoers.d/pia-vpn
 ```
+
 Add the following line (replace jonathon with your username):
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
 
+
 3. 🛠️ Prepare the Container
-
 We use a permanent hidden directory to keep your home folder clean.
-
 Choose the tool native to your Operating System to create the permanent apps container.
 For Fedora Silverblue (Toolbox)
 
