@@ -110,6 +110,7 @@ toolbox run -c apps bash -c "cd ~/manual-connections && ./get_region.sh"
 
 2. Note the IP address and Public Key from the output.
 
+
 3. Update the host connection (replace NEW_IP and PUB_KEY accordingly)
 ```bash
 nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowed-ips=0.0.0.0/0"
@@ -151,6 +152,7 @@ Add the following line (replace jonathon with your username):
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
+
 3. 🛠️ Prepare the Container
 
 We use a permanent hidden directory to keep your home folder clean.
@@ -159,27 +161,33 @@ Choose the tool native to your Operating System to create the permanent apps con
 For Fedora Silverblue (Toolbox)
 
 a) Create the hidden directory & toolbox:
-bash
-
+```bash
 mkdir -p ~/.opt/pia-manual
 toolbox create -c apps
+```
 
 b) Enter toolbox and install requirements:
 ```bash
 toolbox enter apps
 ```
-Inside the container run:
+
+c) Inside the container run:
 ```bash
 sudo dnf install git wireguard-tools jq curl -y
 git clone https://github.com/pia-foss/manual-connections.git ~/.opt/pia-manual
 ```
-Set up passwordless sudo for automation:
+
+d) Set up passwordless sudo for automation:
 ```bash
 sudo visudo
 ```
-Add to bottom: <your-username> ALL=(ALL) NOPASSWD: ALL
+Add to bottom: 
 ```bash
-exit
+<your-username> ALL=(ALL) NOPASSWD: ALL
+```
+Example:
+```bash
+jonathon ALL=(ALL) NOPASSWD: ALL
 ```
 For Bazzite Users (Distrobox)
 
@@ -192,12 +200,14 @@ b) Enter distrobox and install requirements:
 ```bash
 distrobox enter apps
 ```
-Inside the container run:
+
+c) Inside the container run:
 ```bash
 sudo dnf install git wireguard-tools jq curl -y
 git clone https://github.com/pia-foss/manual-connections.git ~/.opt/pia-manual
 ```
-Set up passwordless sudo for automation:
+
+d) Set up passwordless sudo for automation:
 ```bash
 sudo visudo
 ```
@@ -211,16 +221,19 @@ jonathon ALL=(ALL) NOPASSWD: ALL
 ```
 Save and exit, then type exit to return to the host.
 
+
 4. Deploy the Autostart Script
 
 Copy the script from the repository to your hidden .opt folder:
 ```bash
 cp ~/fedora-hub/vpn/pia-wireguard-silverblue/pia-autostart.sh /var/home/jonathon/.opt/pia-manual/
 ```
+
 Make the script executable
 ```bash
 chmod +x /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
+
 
 5. Create the Systemd User Service
 
@@ -244,6 +257,7 @@ RemainAfterExit=yes
 [Install]
 WantedBy=default.target
 ```
+
 6. Create the Desktop "Renew" Launcher
 
 This adds a "Renew PIA VPN" icon to your GNOME applications menu.
@@ -271,6 +285,7 @@ mkdir -p ~/.local/share/icons/hicolor/256x256/apps/
 cp ~/fedora-hub/vpn/pia-wireguard-silverblue/piavpn.png ~/.local/share/icons/hicolor/256x256/apps/
 gtk-update-icon-cache ~/.local/share/icons/hicolor
 ```
+
 8. Enable and Test
 a) Reload and enable the service
 ```bash
@@ -281,6 +296,7 @@ b) Test the script manually from the hidden path
 ```bash
 ~/.opt/pia-manual/pia-autostart.sh
 ```
+
 9. Maintenance & Notes
 
 IP Refresh: If the IP changes while using the computer, simply find the "Renew PIA VPN" app in your menu and click it. It will open a terminal, show the fresh handshake, and close after 10 seconds.
