@@ -158,7 +158,8 @@ jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.op
 We use a permanent hidden directory to keep your home folder clean.
 Choose the tool native to your Operating System to create the permanent apps container.
 
-<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>Fedora Silverblue (Toolbox)</text></svg>" alt="Fedora Silverblue (Toolbox)"/>
+
+$\color{#007BFF}{\textsf{Fedora Silverblue (Toolbox)}}$
 
 
 Create the hidden directory & toolbox:
@@ -190,7 +191,9 @@ Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>Bazzite Users (Distrobox)</text></svg>" alt="Bazzite Users (Distrobox)"/>
+
+$\color{#007BFF}{\textsf{Bazzite users (Distrobox)}}$
+
 
 Create the hidden directory & distrobox:
 ```bash
