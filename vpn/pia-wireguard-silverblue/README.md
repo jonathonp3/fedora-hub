@@ -30,16 +30,28 @@ bash vpn/pia-wireguard-silverblue/pia-deploy.sh
 
 ## Manual Installation (Recommended for first time usage so you understand the process. After that use "Advanced: Automation (Auto-start & Desktop Integration)"):
 
-### Phase 1: Container Setup (Toolbox)   
+### Phase 1: Container Setup (Toolbox or Distrobox)   
 
-1. Create the 'apps' toolbox
+1. Silverblue - Create the 'apps' on toolbox
 ```bash
 toolbox create -c apps
 ```
+or
 
-2. Enter the toolbox
+Bazzite (Universal Blue - create the 'apps' on distrobox 
+```bash
+distrobox create -n apps --image fedora:latest
+```
+
+2. Enter toolbox (Silverblue)
 ```bash
 toolbox enter apps
+```
+or
+
+Enter distrobox (Bazzite):
+```bash
+distrobox enter apps
 ```
 
 3. Install dependencies inside the container
