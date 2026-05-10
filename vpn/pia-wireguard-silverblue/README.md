@@ -151,33 +151,61 @@ Add the following line (replace jonathon with your username):
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
-3. Create and Prepare the "Apps" Toolbox
+3. 🛠️ Prepare the Container
 
 We use a permanent hidden directory to keep your home folder clean.
 
+Choose the tool native to your Operating System to create the permanent apps container.
+For Fedora Silverblue (Toolbox)
+
 a) Create the hidden directory & toolbox:
-```bash
+bash
+
 mkdir -p ~/.opt/pia-manual
 toolbox create -c apps
-```
+
 b) Enter toolbox and install requirements:
 ```bash
 toolbox enter apps
-sudo dnf install git wireguard-tools jq curl -y
 ```
-c) Clone the PIA scripts into the hidden folder:
+Inside the container run:
 ```bash
-cd ~/.opt/pia-manual
-git clone https://github.com/pia-foss/manual-connections.git .
+sudo dnf install git wireguard-tools jq curl -y
+git clone https://github.com/pia-foss/manual-connections.git ~/.opt/pia-manual
 ```
-
-d) Set up Passwordless Sudo INSIDE the container:
-bash
+Set up passwordless sudo for automation:
 ```bash
 sudo visudo
 ```
-Inside visudo, add to the bottom (replace jonathon with your username):
-text
+Add to bottom: <your-username> ALL=(ALL) NOPASSWD: ALL
+```bash
+exit
+```
+For Bazzite Users (Distrobox)
+
+a) Create the hidden directory & distrobox:
+```bash
+mkdir -p ~/.opt/pia-manual
+distrobox create -n apps --image fedora:latest
+```
+b) Enter distrobox and install requirements:
+```bash
+distrobox enter apps
+```
+Inside the container run:
+```bash
+sudo dnf install git wireguard-tools jq curl -y
+git clone https://github.com/pia-foss/manual-connections.git ~/.opt/pia-manual
+```
+Set up passwordless sudo for automation:
+```bash
+sudo visudo
+```
+Add to bottom: 
+```bash
+<your-username> ALL=(ALL) NOPASSWD: ALL
+```
+Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
