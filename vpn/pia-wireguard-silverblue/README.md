@@ -188,7 +188,7 @@ Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-![Bazzite Users (Distrobox)](https://img.shields.io/badge/Bazzite%20Users%20%28Distrobox%29-blue)
+<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>Bazzite Users (Distrobox)</text></svg>" alt="Bazzite Users (Distrobox)"/>
 
 Create the hidden directory & distrobox:
 ```bash
