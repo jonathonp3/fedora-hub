@@ -32,13 +32,13 @@ bash vpn/pia-wireguard-silverblue/pia-deploy.sh
 
 ### Phase 1: Container Setup (Toolbox or Distrobox)   
 
-1. Silverblue - Create the 'apps' on toolbox
+1. Create the 'apps' on toolbox (Silverblue)
 ```bash
 toolbox create -c apps
 ```
 or
 
-Bazzite (Universal Blue - create the 'apps' on distrobox 
+Create the 'apps' on distrobox (Bazzite - Universal Blue)
 ```bash
 distrobox create -n apps --image fedora:latest
 ```
