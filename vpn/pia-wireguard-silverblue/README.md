@@ -13,6 +13,8 @@ A **"Stateless"** deployment script that creates a temporary **Toolbox** contain
 *   **Fully Automated:** Handles the complex PIA API handshake automatically—just enter your credentials and the script does the rest.
 *   **LAN Aware:** Built to work alongside local network bridges (e.g., `br0`) without interrupting local services like Nextcloud.
 
+[🚀 Click here for the Automation & Clean Home Guide](#automation-guide)
+
 ### 📥 Quick Start Install 
 1. **Clone the repository:**
 ```bash
@@ -108,7 +110,7 @@ toolbox run -c apps bash -c "cd ~/manual-connections && ./get_region.sh"
 
 2. Note the IP address and Public Key from the output.
 
-3. Update the host connection (Replace NEW_IP and PUB_KEY accordingly)
+3. Update the host connection (replace NEW_IP and PUB_KEY accordingly)
 ```bash
 nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowed-ips=0.0.0.0/0"
 ```
@@ -117,8 +119,8 @@ nmcli connection modify pia wireguard.peers "PUB_KEY endpoint=NEW_IP:1337 allowe
 ```bash
 nmcli connection up pia
 ```
-
-🤖 Advanced: Automation (Auto-start & Desktop Integration keeping your home directory clean)
+<a name="automation-guide"></a>
+## 🤖 Advanced: Automation (Auto-start & Desktop Integration keeping your home directory clean)
 
 To have your VPN automatically refresh keys and connect silently whenever you restart, and to have a "Renew" icon in your apps menu.
 1. Create a Secure Credentials File
@@ -144,7 +146,7 @@ Tell the host to allow the autostart script to manage the network without a pass
 ```bash
 sudo visudo -f /etc/sudoers.d/pia-vpn
 ```
-Add the following line (Replace jonathon with your username):
+Add the following line (replace jonathon with your username):
 ```bash
 jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.opt/pia-manual/pia-autostart.sh
 ```
@@ -220,7 +222,7 @@ This adds a "Renew PIA VPN" icon to your GNOME applications menu.
 mkdir -p ~/.local/share/applications/
 vi ~/.local/share/applications/pia-renew.desktop
 ```
-Add the following configuration:
+Add the following configuration (replace jonathon with your username):
 ```bash
 [Desktop Entry]
 Version=1.0
