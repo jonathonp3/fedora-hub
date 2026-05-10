@@ -157,7 +157,8 @@ jonathon ALL=(ALL) NOPASSWD: /usr/bin/nmcli, /usr/bin/wg, /var/home/jonathon/.op
 3. Prepare the Container
 We use a permanent hidden directory to keep your home folder clean.
 Choose the tool native to your Operating System to create the permanent apps container.
-For Fedora Silverblue (Toolbox)
+
+<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='48'><text x='0' y='30' font-size='18' font-family='Segoe UI,Roboto,Arial' font-weight='700' fill='%23007BFF' text-decoration='underline'>For Fedora Silverblue (Toolbox)</text></svg>" alt="For Fedora Silverblue (Toolbox)"/>
 
 Create the hidden directory & toolbox:
 ```bash
