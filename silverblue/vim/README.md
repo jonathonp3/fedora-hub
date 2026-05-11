@@ -180,9 +180,9 @@ ls -l /usr/local/share/vim/colors/
 How to browse them in real-time
 
 You can cycle through these themes in your terminal by typing:
-```bash
+
 :colorscheme [Space] [Tab]
-```
+
 
 
 
