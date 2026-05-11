@@ -1,5 +1,5 @@
 # Full Vim Installation (catppuccin Edition) for Fedora Silverblue (Toolbox)
-Overview
+## Overview
 
 This guide builds and installs Vim from source inside a Toolbox container, then installs the binary and runtime files to /usr/local on the host so both your user and sudo see the same Vim. It also creates .vimrc files that enable True Color and set the Catppuccin/Unokai-like theme.
 Prerequisites
