@@ -136,7 +136,7 @@ colorscheme unokai
 
 These themes are installed system-wide in 
 ```bash
-/usr/local/share/vim/colors/
+ls -l /usr/local/share/vim/colors/
 ```
 
     🎨 Included Vim Colorschemes
