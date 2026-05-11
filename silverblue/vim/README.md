@@ -134,12 +134,12 @@ Example set unokai:
 colorscheme unokai
 ```
 
-    🎨 Included Vim Colorschemes
-
 These themes are installed system-wide in 
 ```bash
 /usr/local/share/vim/colors/
 ```
+
+    🎨 Included Vim Colorschemes
 
 🌟 Recommended Modern Themes
 
