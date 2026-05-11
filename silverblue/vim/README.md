@@ -180,11 +180,10 @@ ls -l /usr/local/share/vim/colors/
 How to browse them in real-time
 
 You can cycle through these themes in your terminal by typing:
-vim
-
+```bash
 :colorscheme [Space] [Tab]
+```
 
-Powered by a Native Huge Build of Vim 9.2+ on Fedora 44.
 
 
 
