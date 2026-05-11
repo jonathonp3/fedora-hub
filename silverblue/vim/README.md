@@ -143,7 +143,7 @@ set number
 set backspace=indent,eol,start
 ```
 
-Local user configuration:
+Local userss configuration:
 ```bash
 vim ~/.vimrc
 ```
@@ -163,34 +163,52 @@ Use any theme from
 ```bash
 ls -l  /usr/local/share/vim/colors/
 ```
-Themes:
 
-blue.vim
-catppuccin.vim
-darkblue.vim
-default.vim
-delek.vim
-desert.vim
-elflord.vim
-evening.vim
-habamax.vim
-industry.vim
-koehler.vim
-lunaperche.vim
-morning.vim
-pablo.vim
-peachpuff.vim
-quiet.vim
-retrobox.vim
-ron.vim
-shine.vim
-slate.vim
-sorbet.vim
-tools
-torte.vim
-unokai.vim
-wildcharm.vim
-zaibatsu.vim
-zellner.vim
+🎨 Included Vim Colorschemes
 
+These themes are installed system-wide in /usr/local/share/vim/colors/. To use one, type :colorscheme <name> inside Vim.
+🌟 Recommended Modern Themes
+
+    catppuccin (Current System Default) - High-end pastel dark theme.
+    unokai - Vibrant neon theme based on Monokai.
+    retrobox - Warm, Gruvbox-inspired palette.
+    habamax - The clean, professional Vim 9 default.
+
+🟢 High-Contrast & "Hacker" Themes
+
+    torte - High-contrast black with vivid green text.
+    industry - Professional dark theme with mint/teal accents.
+    ron - Dark background with neon-bright highlights.
+    elflord - Classic high-contrast cyan and green.
+
+🏛️ The Great Classics
+
+    desert - The legendary, low-strain grey/brown theme.
+    evening - Soft blue-grey dark theme.
+    slate - Deep grey and blood-orange tones.
+    darkblue / blue - Traditional blue-background themes.
+    delek / koehler / pablo - Legacy favorites.
+
+☀️ Light Themes (Daylight Mode)
+
+    morning - Clean, grey-white light theme.
+    shine - Bright, crisp white background.
+    peachpuff - Soft, warm light theme.
+    quiet - Minimalist, low-distraction layout.
+
+🛠️ Specialty & Other
+
+    lunaperche - A versatile modern theme that adapts well.
+    sorbet - Vibrant and colorful.
+    wildcharm / zaibatsu / zellner - Unique aesthetic variations.
+    default - The standard, unflavored Vim look.
+
+How to browse them in real-time
+
+You can cycle through these themes in your terminal by typing:
+vim
+
+:colorscheme [Space] [Tab]
+
+Powered by a Native Huge Build of Vim 9.2+ on Fedora 44.
 
