@@ -1,133 +1,87 @@
-# Full Vim Installation (catppuccin Edition) for Fedora Silverblue (Toolbox)
+# Full Vim Installation (Catppuccin Edition) for Fedora Silverblue
 ## Overview
 
-This guide builds and installs Vim from source inside a Toolbox container, then installs the binary and runtime files to /usr/local on the host so both your user and sudo see the same Vim. It also creates .vimrc files that enable True Color and set the Catppuccin/Unokai-like theme.
+This guide builds and installs Vim from source inside a Toolbox container, then installs the binary and runtime files to /usr/local on the host. This ensures that both your standard user and sudo commands use the same high-performance, full-featured Vim.
 Prerequisites
 
-    Fedora Silverblue with toolbox installed
-    sudo privileges on the host
-    Internet access
+    Fedora Silverblue
+    Toolbox installed
+    Sudo privileges on the host
 
-Step-by-step
+Step-by-Step Installation
 
-Create and prepare the Toolbox
+1. Prepare the Build Environment
+
+Create and enter a dedicated toolbox:
 ```bash
 toolbox create vim-build
-```
-
-Enter toolbox
-```bash
 toolbox enter vim-build
 ```
-Install libraries
+Install the required libraries and compilers:
 ```bash
 sudo dnf install -y git gcc make ncurses-devel python3-devel
 ```
 
-Clone or update Vim source
+2. Build Vim from Source
+
+Clone the latest source code:
 ```bash
 git clone https://github.com/vim/vim.git
-```
-
-Enter the source folder:
-```bash
 cd ~/vim
 ```
+Run the "Huge" configuration (enables Python3, Multi-byte, and all advanced features):
+bash
 
-Run the configuration (The "Huge" setup):
-```bash
 ./configure --with-features=huge \
             --enable-python3interp=yes \
             --enable-multibyte \
             --prefix=/usr/local
-```
-Compile:
+
+Compile using all available CPU cores:
 ```bash
 make -j$(nproc)
 ```
-
-Exit toolbox
+Exit the toolbox:
 ```bash
 exit
 ```
 
-Create bin directory
+3. Install to the Host (Global)
+
+These commands are run on your host terminal to move the files into the persistent /usr/local area.
+bash
+
+Create the binary directory
 ```bash
 sudo mkdir -p /usr/local/bin/
 ```
 
-Copy the compiled 'Huge' Vim binary from your source folder to the system path
+Copy the compiled binary
 ```bash
 sudo cp ~/vim/src/vim /usr/local/bin/vim
-```
-
-Ensure the global shared directory exists for Vim's assets (colors, syntax, etc.)
-```bash
-sudo mkdir -p /usr/local/share/vim
-```
-
-Copy all runtime files (the 'brains' of Vim) to the global share directory
-This allows 'sudo vim' and all users to access colorschemes and syntax highlighting
-```bash
-sudo cp -r ~/vim/runtime/* /usr/local/share/vim/
-```
-
-Make sure the binary has permission to execute as a program
-```bash
 sudo chmod +x /usr/local/bin/vim
 ```
 
-Tell the terminal to clear its path cache so it 'sees' Vim immediately
+Create and copy the runtime (syntax, colors, etc.)
+```bash
+sudo mkdir -p /usr/local/share/vim
+sudo cp -r ~/vim/runtime/* /usr/local/share/vim/
+```
+
+Refresh the host path cache
 ```bash
 hash -r
 ```
 
-```
+Configuration & Themes
+The Global Configuration (Sudo/Default)
 
-What nocompatible unlocks
-When you set nocompatible, you are saying "I want the full power of Vim." It enables:
-Multi-level undo (hitting u multiple times).
-Better Backspace behavior (allowing you to backspace over line breaks).
-Plugins and Scripts (which almost all require nocompatible mode).
-Advanced command completion (using the Tab key in the command bar).
-
-
-Check colour scheme in vim
-```bash
-vim
-:echo g:colors_name
-```
-
-Create personal Vim configuration file
-```bash
-vim ~/.vimrc
-```
-
-The "Override" Rule
-
-Vim follows a strict order. If a setting exists in both files, the last one read wins.
-
-    First: Vim reads /usr/local/share/vim/vimrc (Global).
-    Second: Vim reads ~/.vimrc (User).
-
-
-Final Host Setup
-
-Verify the installation:
-
-    which vim should return /usr/local/bin/vim.
-    vim --version should show Huge version and Compiled by jonathon@toolbx.
-
-Enable Colors and Settings (System-wide)
-
-To ensure that both your user and sudo (root) have the same experience, create your configuration files.
-
-Create the Global Vim Configuration File
+Create the global settings file for all users:
 ```bash
 sudo vi /usr/local/share/vim/vimrc
 ```
-add
 
+Add the following to the file:
 ```bash
 " Enable features for all users
 set nocompatible
@@ -143,30 +97,50 @@ set number
 set backspace=indent,eol,start
 ```
 
-Local userss configuration:
+User Configuration
+
+Create your personal settings:
 ```bash
 vim ~/.vimrc
 ```
-
-Recommended baseline settings:
+Add your baseline settings:
 ```bash
 set nocompatible
 syntax on
 set termguicolors
 set background=dark
-colorscheme unokai
+colorscheme catppuccin
 set number
 set clipboard=unnamedplus
 ```
+Verification
 
-Use any theme from
+To ensure everything is working correctly, run:
+
+    which vim — should return /usr/local/bin/vim.
+    vim --version — should show Huge version and Compiled by [your-username]@toolbx.
+    sudo vim /etc/fstab — should display with full Catppuccin colors and line numbers.
+
+Included Colorschemes
+
+    
+To change the local theme:
 ```bash
-ls -l  /usr/local/share/vim/colors/
+vim ~/.vimrc
 ```
 
-🎨 Included Vim Colorschemes
+Example set unokai:
+```bash
+colorscheme unokai
+```
 
-These themes are installed system-wide in /usr/local/share/vim/colors/. To use one, type :colorscheme <name> inside Vim.
+    🎨 Included Vim Colorschemes
+
+These themes are installed system-wide in 
+```bash
+/usr/local/share/vim/colors/
+```
+
 🌟 Recommended Modern Themes
 
     catppuccin (Current System Default) - High-end pastel dark theme.
@@ -211,4 +185,6 @@ vim
 :colorscheme [Space] [Tab]
 
 Powered by a Native Huge Build of Vim 9.2+ on Fedora 44.
+
+
 
