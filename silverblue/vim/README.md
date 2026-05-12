@@ -116,10 +116,15 @@ set clipboard=unnamedplus
 Verification
 
 To ensure everything is working correctly, run:
+```bash
+which vim
+vim --version
+```
+Should display with full Catppuccin colors and line numbers.
+```bash
+vim /etc/fstab 
+```
 
-    which vim — should return /usr/local/bin/vim.
-    vim --version — should show Huge version and Compiled by [your-username]@toolbx.
-    sudo vim /etc/fstab — should display with full Catppuccin colors and line numbers.
 
 Included Colorschemes
 
