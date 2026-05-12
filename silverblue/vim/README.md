@@ -30,12 +30,12 @@ git clone https://github.com/vim/vim.git
 cd ~/vim
 ```
 Run the "Huge" configuration (enables Python3, Multi-byte, and all advanced features):
-bash
-
+```bash
 ./configure --with-features=huge \
             --enable-python3interp=yes \
             --enable-multibyte \
             --prefix=/usr/local
+```
 
 Compile using all available CPU cores:
 ```bash
