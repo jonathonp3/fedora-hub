@@ -11,8 +11,9 @@ This guide documents how to securely and persistently mount the **Fedora Silverb
 
 ## 🛠️ Setup Instructions
 
-### 1. Host Preparation (Luhman-16)
-Enable Remote Login and open the SSH port:
+###1. Host Preparation (Luhman-16)
+
+###Enable Remote Login and open the SSH port:
 ```bash
 # Enable SSH via Settings > Sharing > Remote Login OR:
 sudo systemctl enable --now sshd
@@ -22,18 +23,33 @@ sudo firewall-cmd --add-service=ssh --permanent
 sudo firewall-cmd --reload
 ```
 
-2. VM Preparation (Workstation Client)
+###2. VM Preparation (Workstation Client)
 
 Install the mounting tools and enable global permissions:
+
+Install the SSHFS driver
 ```bash
 sudo dnf install sshfs
-# Uncomment 'user_allow_other' in /etc/fuse.conf
-sudo sed -i 's/#user_allow_other/user_allow_other/' /etc/fuse.conf
-# Create the mount point
+```
+
+Enable global 'allow_other' permissions in FUSE
+
+(Includes the space to match Fedora's default formatting)
+```bash
+sudo sed -i 's/# user_allow_other/user_allow_other/' /etc/fuse.conf
+```
+
+Verify the change (should show 'user_allow_other' without a #)
+```bash
+cat /etc/fuse.conf
+```
+
+Create the mount point
+```bash
 mkdir -p ~/Luhman-16
 ```
 
-3. Password-less Authentication
+###3. Password-less Authentication
 
 Generate a key in the VM and send it to the host:
 bash
@@ -41,7 +57,22 @@ bash
 ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
 ssh-copy-id jonathon@[HOST_IP]
 ```
-4. Persistent Mount (/etc/fstab)
+###4. Persistent Mount (/etc/fstab)
+
+Optional: Manual Connection Test
+Run this to verify the connection and permissions before editing fstab.
+If this works, your files will appear in the folder.
+```bash
+sshfs jonathon@[HOST_IP]:/var/home/jonathon/ /home/jonathon/Luhman-16 -o identityfile=/home/jonathon/.ssh/id_ed25519,allow_other,default_permissions
+```
+Check if files are visible
+```bash
+ls ~/Luhman-16
+```
+Unmount the test before proceeding to fstab setup
+```bash
+fusermount3 -u ~/Luhman-16
+```
 
 Edit fstab
 ```bash
@@ -49,5 +80,14 @@ sudo vim /etc/fstab
 ```
 Add this line to the VM's /etc/fstab to enable Systemd Automount. This ensures the connection is only made when you click the folder, preventing boot delays.
 ```bash
-jonathon@[HOST_IP]:/var/home/jonathon  /home/jonathon/Luhman-16  fuse.sshfs  noauto,x-systemd.automount,_netdev,reconnect,identityfile=/home/jonathon/.ssh/id_ed25519,allow_other,default_permissions 0 0
+jonathon@[HOST_IP]:/var/home/jonathon /home/jonathon/Luhman-16 fuse.sshfs noauto,x-systemd.automount,_netdev,reconnect,identityfile=/home/jonathon/.ssh/id_ed25519,allow_other,default_permissions 0 0
 ```
+
+Tell systemd manager to stop, re-scan the entire system for changes, and "re-read" all configuration files.
+```bash
+sudo systemctl daemon-reload
+```
+
+In Fedora, systemd acts as the manager of the filesystem; running sudo systemctl daemon-reload activates a generator that scans your fstab and instantly creates background "virtual units" for your configuration. This applies your changes immediately, setting up a "listener" that waits to snap the connection into place the moment you access the folder.
+
+
