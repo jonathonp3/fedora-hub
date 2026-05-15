@@ -11,7 +11,7 @@ This guide documents how to securely and persistently mount the **Fedora Silverb
 
 ## 🛠️ Setup Instructions
 
-##1. Host Preparation (Luhman-16)
+1. Host Preparation (Luhman-16)
 
 ##Enable Remote Login and open the SSH port:
 ```bash
@@ -23,7 +23,7 @@ sudo firewall-cmd --add-service=ssh --permanent
 sudo firewall-cmd --reload
 ```
 
-##2. VM Preparation (Workstation Client)
+2. VM Preparation (Workstation Client)
 
 Install the mounting tools and enable global permissions:
 
@@ -49,8 +49,8 @@ Create the mount point
 mkdir -p ~/Luhman-16
 ```
 
-##3. Password-less Authentication
-#Host (Luhman-16):
+3. Password-less Authentication
+Host (Luhman-16):
 Creates a new keypair (both private and public)
 ```bash
 ssh-keygen -t ed25519
@@ -81,7 +81,7 @@ Copy public key to the host (Luhman-16).
 ```bash
 ssh-copy-id jonathon@[HOST_IP]
 ```
-##4. Persistent Mount (/etc/fstab)
+4. Persistent Mount (/etc/fstab)
 
 Optional: Manual Connection Test
 Run this to verify the connection and permissions before editing fstab.
