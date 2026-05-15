@@ -77,7 +77,7 @@ Creates a new keypair (both private and public)
 ```bash
 ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
 ```
-Copy public key you just generated on the client VM and installs it on the host (Luhman-16).
+Copy public key to the host (Luhman-16).
 ```bash
 ssh-copy-id jonathon@[HOST_IP]
 ```
