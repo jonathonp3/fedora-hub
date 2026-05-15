@@ -49,8 +49,8 @@ Create the mount point
 mkdir -p ~/Luhman-16
 ```
 
-###3. Password-less Authentication
-#####Host (Luhman-16):
+##3. Password-less Authentication
+#Host (Luhman-16):
 Creates a new keypair (both private and public)
 ```bash
 ssh-keygen -t ed25519
@@ -70,7 +70,7 @@ Allow SSH through firewall (firewalld) if it is not already allowed:
 sudo firewall-cmd --permanent --add-service=ssh
 sudo firewall-cmd --reload
 ```
-####VM (Fedora Workstation)
+VM (Fedora Workstation)
 Generate a key in the VM and send it to the host:
 
 Creates a new keypair (both private and public)
