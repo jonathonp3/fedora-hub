@@ -50,11 +50,35 @@ mkdir -p ~/Luhman-16
 ```
 
 ###3. Password-less Authentication
+#####Host (Luhman-16):
+Creates a new keypair (both private and public)
+```bash
+ssh-keygen -t ed25519
+```
+or 
 
-Generate a key in the VM and send it to the host:
-bash
+Generates a new SSH key pair in silent mode without prompts:
 ```bash
 ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
+```
+Enable and start the sshd service:
+```bash
+sudo systemctl enable --now sshd
+```
+Allow SSH through firewall (firewalld) if it is not already allowed:
+```bash
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --reload
+```
+####VM (Fedora Workstation)
+Generate a key in the VM and send it to the host:
+
+Creates a new keypair (both private and public)
+```bash
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
+```
+Copy public key you just generated on the client VM and installs it on the host (Luhman-16).
+```bash
 ssh-copy-id jonathon@[HOST_IP]
 ```
 ###4. Persistent Mount (/etc/fstab)
