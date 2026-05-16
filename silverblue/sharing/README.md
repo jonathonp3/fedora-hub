@@ -1,4 +1,4 @@
-# Persistent Host-to-VM Sharing (The SSHFS Method)
+# Method 1: Persistent Host-to-VM Sharing (The SSHFS Method)
 
 This guide documents how to securely and persistently mount the **Fedora Silverblue** host home directory inside a **Fedora Workstation VM**. 
 
@@ -114,4 +114,19 @@ sudo systemctl daemon-reload
 
 In Fedora, systemd acts as the manager of the filesystem; running sudo systemctl daemon-reload activates a generator that scans your fstab and instantly creates background "virtual units" for your configuration. This applies your changes immediately, setting up a "listener" that waits to snap the connection into place the moment you access the folder.
 
+
+Method 2: The Lightweight Nautilus Way (GUI Only)
+
+If you only need to drag-and-drop files occasionally using your mouse and don't require terminal or background app access, you can use the built-in Nautilus "Connect to Server" feature.
+
+Prerequisite: You must still complete the SSH Key Exchange (Step 2) for this to be persistent and password-less.
+
+    Open Nautilus (Files).
+    Click 'Network' in the sidebar.
+    In 'Connect' to 'Server address' box, enter: sftp://192.168.1.132/var/home/jonathon
+    Click Connect.
+    Pro Tip: Once connected, press Ctrl + D or right-click the folder in the sidebar and select Add to Bookmark.
+
+Why this works: 
+Because your SSH keys are already installed, Nautilus will bypass the password prompt and automatically "remount" this connection every time you click the bookmark, even after a reboot.
 
