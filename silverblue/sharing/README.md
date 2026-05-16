@@ -1,4 +1,4 @@
-# Method 1: Persistent Host-to-VM Sharing (The SSHFS Method)
+# Persistent Host-to-VM Sharing (The SSHFS Method)
 
 This guide documents how to securely and persistently mount the **Fedora Silverblue** host home directory inside a **Fedora Workstation VM**. 
 
