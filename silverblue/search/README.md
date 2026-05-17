@@ -51,10 +51,9 @@ Simply run the script. It will automatically default to your $HOME directory and
 
 Manual Directory & Keyword:
 You can specify a directory and a keyword via the command line to skip the prompts:
-bash
-
+```bash
 ./search_docs.sh /path/to/documents -k "kidneys"
-
+```
 3. Search Options
 
     -k [keyword]: Sets the search term via command line.
