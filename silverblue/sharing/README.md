@@ -115,18 +115,30 @@ sudo systemctl daemon-reload
 In Fedora, systemd acts as the manager of the filesystem; running sudo systemctl daemon-reload activates a generator that scans your fstab and instantly creates background "virtual units" for your configuration. This applies your changes immediately, setting up a "listener" that waits to snap the connection into place the moment you access the folder.
 
 
-Method 2: The Lightweight Nautilus Way (GUI Only)
+🖱️ Method 2: The Lightweight Nautilus Way (GUI Only)
 
-If you only need to drag-and-drop files occasionally using your mouse and don't require terminal or background app access, you can use the built-in Nautilus "Connect to Server" feature.
-
-Prerequisite: You must still complete the SSH Key Exchange (Step 2) for this to be persistent and password-less.
+If you prefer a pure graphical interface and don't want to use the terminal or edit system files, you can use the built-in Nautilus "Connect to Server" feature.
 
     Open Nautilus (Files).
-    Click 'Network' in the sidebar.
-    In 'Connect' to 'Server address' box, enter: sftp://192.168.1.132/var/home/jonathon
+    Click + Other Locations (or Network) in the sidebar.
+    In the Connect to Server address box, enter: sftp://192.168.50.100/var/home/jonathon
     Click Connect.
-    Pro Tip: Once connected, press Ctrl + D or right-click the folder in the sidebar and select Add to Bookmark.
+    Enter your Host username and password.
+    Crucial Step: Select "Remember Forever" to ensure the connection stays password-less.
+    Pro Tip: Once connected, press Ctrl + D to Add a Bookmark.
 
-Why this works: 
-Because your SSH keys are already installed, Nautilus will bypass the password prompt and automatically "remount" this connection every time you click the bookmark, even after a reboot.
+Why this works:
+Nautilus saves your credentials in the secure GNOME Keyring. Even after a reboot, clicking the bookmark will instantly "remount" the host directory without asking for a password.
+
+🔍 Technical Note: What happened to .ssh?
+
+Even if you didn't create a key, Nautilus automatically creates the ~/.ssh/known_hosts file. As seen in my cat output, it has saved three types of "fingerprints" for the host:
+
+    ssh-ed25519: The modern fast fingerprint.
+    ssh-rsa: The classic fingerprint.
+    ecdsa-sha2: The standard secure fingerprint.
+
+Having these files means your VM and Host have officially "shaken hands" and trust each other! 🚀📁🛠️
+
+This is a great "Alternative Path" for your guide. It makes your fedora-hub useful for both command-line experts and desktop-focused users. 
 
