@@ -32,6 +32,7 @@ sudo dnf install antiword
 ```
 
 
+
 🚀 Usage Instructions
 1. Installation
 
@@ -55,6 +56,7 @@ You can specify a directory and a keyword via the command line to skip the promp
 ```bash
 ./search_docs.sh /path/to/documents -k "kidneys"
 ```
+
 3. Search Options
 
     -k [keyword]: Sets the search term via command line.
