@@ -3,6 +3,7 @@
 Overview
 
 DocSearch Pro is a high-performance, unified search utility designed for Fedora Silverblue and other Linux workstations. While standard tools like grep struggle to read inside compressed Office formats, this script bridges the gap by scanning both plain text and document XML structures in a single pass.
+
 Purpose
 
 The script allows you to search for specific text strings or keywords across:
