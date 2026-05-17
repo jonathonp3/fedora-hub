@@ -69,5 +69,50 @@ You can specify a directory and a keyword via the command line to skip the promp
     Native Performance: Runs as a native host script without the overhead of a container or Flatpak.
     Btrfs Optimized: Efficiently scans across Btrfs subvolumes on your physical dis
 
+
+# 🖥️ Desktop Integration (GNOME Launcher)
+
+To launch DocSearch Pro directly from your GNOME Activities/Apps menu (like a native application), follow these steps to create a .desktop entry.
+1. Move the Script to a Persistent Location
+
+Place the script in a dedicated folder in your home directory:
+```bash
+mkdir -p ~/.opt/scripts
+cp ~/fedora-hub/silverblue/search/search_docs_desktop.sh ~/.opt/scripts/
+chmod +x ~/.opt/scripts/search_docs_desktop.sh
+```
+2. Create the Desktop Entry
+
+Create a new file in the local applications folder:
+```bash
+vim ~/.local/share/applications/search_docs.desktop
+```
+Paste the following configuration:
+```bash
+[Desktop Entry]
+Type=Application
+Name=DocSearch Pro
+Comment=Search text in Office and Text files
+Exec=/var/home/jonathon/.opt/scripts/search_docs_desktop.sh
+Icon=system-search
+Terminal=true
+Categories=Utility;TextTools;
+Keywords=search;find;docs;office;
+```
+3. Update the Database
+
+Tell GNOME to refresh the application list:
+```bash
+update-desktop-database ~/.local/share/applications/
+```
+🚀 How it works
+
+    Easy Launch: Press the Super (Windows) key and type "DocSearch" to find and launch the tool.
+    Interactive: Because Terminal=true is set, the script will automatically open in Ptyxis (or your default terminal).
+    Persistent: The script includes a "Press any key to close" prompt at the end, ensuring the window stays open so you can read your search results.
+
+Note: This setup survives Fedora Silverblue system updates as all files reside within the user's /var/home directory.
+
+
 Enjoy 🚀📂🛠️✨
 
