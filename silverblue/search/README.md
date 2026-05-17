@@ -1,4 +1,5 @@
 🔍 DocSearch Pro (search_docs.sh)
+
 Overview
 
 DocSearch Pro is a high-performance, unified search utility designed for Fedora Silverblue and other Linux workstations. While standard tools like grep struggle to read inside compressed Office formats, this script bridges the gap by scanning both plain text and document XML structures in a single pass.
@@ -9,6 +10,7 @@ The script allows you to search for specific text strings or keywords across:
     Plain Text: .txt
     Modern Office: .docx (Microsoft Word) and .odt (LibreOffice/OpenDocument)
     Legacy Office: .doc (Microsoft Word 97-2003)
+
 
 🛠️ Prerequisites & Dependencies
 
@@ -27,6 +29,7 @@ antiword - Converts binary .doc files to searchable text
 ```bash
 sudo dnf install antiword
 ```
+
 
 🚀 Usage Instructions
 1. Installation
