@@ -107,9 +107,9 @@ update-desktop-database ~/.local/share/applications/
 ```
 🚀 How it works
 
-    Easy Launch: Press the Super (Windows) key and type "DocSearch" to find and launch the tool.
-    Interactive: Because Terminal=true is set, the script will automatically open in Ptyxis (or your default terminal).
-    Persistent: The script includes a "Press any key to close" prompt at the end, ensuring the window stays open so you can read your search results.
+Easy Launch: Press the Super (Windows) key and type "DocSearch" to find and launch the tool.
+Interactive: Because Terminal=true is set, the script will automatically open in Ptyxis (or your default terminal).
+Persistent: The script includes a "Press any key to close" prompt at the end, ensuring the window stays open so you can read your search results.
 
 Note: This setup survives Fedora Silverblue system updates as all files reside within the user's /var/home directory.
 
