@@ -40,7 +40,7 @@ Clone fedora-hub and make the script executable:
 ```bash
 git clone https://github.com/your-username/fedora-hub.git
 cd fedora-hub/silverblue/search
-chmod +x search_docs.sh
+chmod +x search_docs
 ```
 
 2. Running a Search
@@ -48,13 +48,13 @@ chmod +x search_docs.sh
 Interactive Mode:
 Simply run the script. It will automatically default to your $HOME directory and prompt you for a keyword.
 ```bash
-./search_docs.sh
+./search_docs
 ```
 
 Manual Directory & Keyword:
-You can specify a directory and a keyword via the command line to skip the prompts:
+You can specify a directory such as Documents and a keyword via the command line to skip the prompts:
 ```bash
-./search_docs.sh /path/to/documents -k "kidneys"
+./search_docs ~/Documents -k "kidneys"
 ```
 
 3. Search Options
@@ -70,22 +70,34 @@ You can specify a directory and a keyword via the command line to skip the promp
     Btrfs Optimized: Efficiently scans across Btrfs subvolumes on your physical dis
 
 
-# 🖥️ Desktop Integration (GNOME Launcher)
+# 🖥️ Desktop Integration (GNOME Launcher) and Terminal
 
-To launch DocSearch Pro directly from your GNOME Activities/Apps menu (like a native application), follow these steps to create a .desktop entry.
+To launch DocSearch Pro directly from your GNOME Activities/Apps menu (like a native application) as well as from the terminal, follow these steps:
 1. Move the Script to a Persistent Location
+
+Clone fedora-hub if you have not already done so:
+```bash
+git clone https://github.com/your-username/fedora-hub.git
+```
 
 Place the script in a dedicated folder in your home directory:
 ```bash
-mkdir -p ~/.opt/scripts
-cp ~/fedora-hub/silverblue/search/search_docs_desktop.sh ~/.opt/scripts/
-chmod +x ~/.opt/scripts/search_docs_desktop.sh
+mkdir -p ~/.local/bin
+cp ~/fedora-hub/silverblue/search/DocSearchPro ~/.local/bin/
+```
+Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
+```
+ln -s ~/.local/bin/DocSearchPro ~/.local/bin/docsearchpro
+```
+Ensure the script is executable
+```bash
+chmod +x ~/.local/bin/DocSearchPro
 ```
 2. Create the Desktop Entry
 
 Create a new file in the local applications folder:
 ```bash
-vim ~/.local/share/applications/search_docs.desktop
+vim ~/.local/share/applications/docsearchpro.desktop
 ```
 Paste the following configuration:
 ```bash
@@ -93,7 +105,7 @@ Paste the following configuration:
 Type=Application
 Name=DocSearch Pro
 Comment=Search text in Office and Text files
-Exec=/var/home/jonathon/.opt/scripts/search_docs_desktop.sh
+Exec=DocSearchPro
 Icon=system-search
 Terminal=true
 Categories=Utility;TextTools;
@@ -105,11 +117,27 @@ Tell GNOME to refresh the application list:
 ```bash
 update-desktop-database ~/.local/share/applications/
 ```
+
+To launch DocSearch Pro directly from the terminal:
+```bash
+DocSearchPro
+```
+or
+```bash
+docsearchpro
+```
 🚀 How it works
 
 Easy Launch: Press the Super (Windows) key and type "DocSearch" to find and launch the tool.
 Interactive: Because Terminal=true is set, the script will automatically open in Ptyxis (or your default terminal).
 Persistent: The script includes a "Press any key to close" prompt at the end, ensuring the window stays open so you can read your search results.
+
+How the search works in GNOME
+
+    If you type "Doc", it will show up.
+    If you type "Search", it will show up.
+    If you type "Pro", it will show up.
+
 
 Note: This setup survives Fedora Silverblue system updates as all files reside within the user's /var/home directory.
 
