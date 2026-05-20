@@ -47,7 +47,7 @@ Clone fedora-hub and make the script executable:
 ```bash
 git clone https://github.com/your-username/fedora-hub.git
 cd fedora-hub/silverblue/search
-chmod +x DocSearchPro
+chmod +x fedora-hub/silverblue/search/DocSearchPro
 ```
 
 Interactive Mode:
