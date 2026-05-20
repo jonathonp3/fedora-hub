@@ -5,19 +5,28 @@ START_DIR="$HOME"
 KEYWORD=""
 SEARCH_CASE_INSENSITIVE=true 
 SEARCH_WHOLE_WORD=true      
+SYSTEM_MODE=false
 
 # --- Help and Usage ---
 display_help() {
-    echo "Usage: $0 [directory_to_scan] [options]"
-    echo "Scans .txt, .odt, .doc, and .docx files for a specific term using Extended Grep."
+    # Captures the specific name used to run the script (DocSearchPro or docsearchpro)
+    local cmd_name=$(basename "$0")
+
+    echo "Usage: $cmd_name [directory_to_scan] [keyword] [options]"
     echo ""
     echo "Options:"
     echo "  -h, --help       Display this help message."
-    echo "  -k, --keyword    Specify keyword (skips the interactive prompt)."
+    echo "  -k, --keyword    Specify keyword (useful if keyword starts with -)."
     echo "  -c, --case       Perform case-sensitive search."
-    echo "  -p, --partial    Allow partial word matches."
+    echo "  -p, --partial    Allow partial word matches (e.g., 'steve' matches 'steven')."
+    echo "  -s, --system     SYSTEM MODE: Search only configs, logs, scripts, and no-ext files."
     echo ""
-    echo "Example: $0 ~/Documents"
+    echo "Examples:"
+    echo "  $cmd_name 'steven'                   # Search home for 'steven'"
+    echo "  $cmd_name ~/Documents 'report'       # Search specific folder for 'report'"
+    echo "  $cmd_name -p 'trace elements'        # Partial match search in home"
+    echo "  sudo $cmd_name /etc -s -p subvol     # System search in /etc for 'subvol'"
+    echo "  $cmd_name /run/media/backup 'data'   # Search an external drive or mount"
     exit 0
 }
 
@@ -36,9 +45,14 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         -c|--case) SEARCH_CASE_INSENSITIVE=false ;;
         -p|--partial) SEARCH_WHOLE_WORD=false ;;
+        -s|--system) SYSTEM_MODE=true ;;
         *)
+            # Smart logic: if it's a valid directory, set it as START_DIR.
+            # Otherwise, if we don't have a keyword yet, set it as the KEYWORD.
             if [ -d "$1" ]; then
                 START_DIR="$1"
+            elif [ -z "$KEYWORD" ]; then
+                KEYWORD="$1"
             else
                 echo "Error: Unknown option or invalid directory '$1'." >&2
                 exit 1
@@ -59,39 +73,59 @@ if [ -z "$KEYWORD" ]; then
 fi
 
 # --- Pre-requisite Checks ---
-for cmd in find unzip grep antiword; do
+for cmd in find unzip grep antiword pdftotext; do
     if ! command -v $cmd &> /dev/null; then
-        echo "Error: '$cmd' command not found." >&2
+        echo "Error: '$cmd' command not found. Please ensure it is installed." >&2
         exit 1
     fi
 done
 
 # --- Construct Grep Options ---
-GREP_OPTIONS="-E" # Upgraded to Extended Regular Expressions
-if [ "$SEARCH_CASE_INSENSITIVE" = true ]; then
-    GREP_OPTIONS+="i"
-fi
-if [ "$SEARCH_WHOLE_WORD" = true ]; then
-    GREP_OPTIONS+="w"
-fi
+GREP_OPTIONS="-E" 
+[ "$SEARCH_CASE_INSENSITIVE" = true ] && GREP_OPTIONS+="i"
+[ "$SEARCH_WHOLE_WORD" = true ] && GREP_OPTIONS+="w"
 SEARCH_TERM="$KEYWORD"
+
+# --- Build Find Command Filters using Arrays ---
+FIND_ARGS=("$START_DIR" -type f)
+EXT_FILTERS=()
+
+if [ "$SYSTEM_MODE" = true ]; then
+    MODE_LABEL="🛠️  SYSTEM MODE (Configs, Logs, Scripts)"
+    EXT_FILTERS=( -iname "*.log" -o -iname "*.conf" -o -iname "*.ini" -o -iname "*.yaml" -o -iname "*.yml" -o -iname "*.sh" -o ! -name "*.*" )
+else
+    MODE_LABEL="📄 DOCUMENT MODE (Office, PDF, Text)"
+    EXT_FILTERS=( -iname "*.odt" -o -iname "*.doc" -o -iname "*.docx" -o -iname "*.txt" -o -iname "*.md" -o -iname "*.html" -o -iname "*.htm" -o -iname "*.pdf" )
+fi
 
 echo "---------------------------------------------------"
 echo "🔍 Searching for: '$KEYWORD'"
 echo "📂 Scanning within: '$START_DIR'"
-echo "⚙️  Mode: Grep Extended (-E)"
+echo "⚙️  $MODE_LABEL"
 echo "---------------------------------------------------"
 
 # --- Unified Search Logic ---
 MATCHING_FILES_OUTPUT=$(
-    find "$START_DIR" -type f \( -iname "*.odt" -o -iname "*.doc" -o -iname "*.docx" -o -iname "*.txt" \) -print0 2>/dev/null | while IFS= read -r -d $'\0' doc_file; do
+    find "${FIND_ARGS[@]}" \( "${EXT_FILTERS[@]}" \) -print0 2>/dev/null | while IFS= read -r -d $'\0' doc_file; do
         MATCH=false
-        LOWER_EXT="${doc_file##*.}"
-        LOWER_EXT="${LOWER_EXT,,}"
+        
+        # Identify extension safely
+        FILENAME=$(basename "$doc_file")
+        if [[ "$FILENAME" != *.* ]]; then
+            LOWER_EXT="no_ext"
+        else
+            LOWER_EXT="${FILENAME##*.}"
+            LOWER_EXT="${LOWER_EXT,,}"
+        fi
 
         case "$LOWER_EXT" in
-            txt)
+            txt|md|html|htm|log|conf|ini|yaml|yml|sh|no_ext)
                 if grep $GREP_OPTIONS "$SEARCH_TERM" "$doc_file" &> /dev/null; then
+                    MATCH=true
+                fi
+                ;;
+            pdf)
+                if pdftotext "$doc_file" - 2>/dev/null | grep $GREP_OPTIONS "$SEARCH_TERM" &> /dev/null; then
                     MATCH=true
                 fi
                 ;;
@@ -118,7 +152,7 @@ MATCHING_FILES_OUTPUT=$(
     done
 )
 
-# --- Summary and Output ---
+# --- Summary and Final Output ---
 if [ -n "$MATCHING_FILES_OUTPUT" ]; then
     echo -e "$MATCHING_FILES_OUTPUT" | sed 's/MATCH: //'
     FOUND_COUNT=$(echo -e "$MATCHING_FILES_OUTPUT" | grep -c "MATCH:")
@@ -130,3 +164,5 @@ echo "---------------------------------------------------"
 echo "Search complete. Found '$KEYWORD' in $FOUND_COUNT file(s)."
 echo ""
 read -n 1 -s -r -p "Press any key to close this window..."
+echo ""
+

@@ -4,70 +4,118 @@ Overview
 
 DocSearch Pro is a high-performance, unified search utility designed for Fedora Silverblue and other Linux workstations. While standard tools like grep struggle to read inside compressed Office formats, this script bridges the gap by scanning both plain text and document XML structures in a single pass.
 
-Purpose
 
-The script allows you to search for specific text strings or keywords across:
+📂 Supported File Formats
 
-    Plain Text: .txt
+The script provides a unified search interface across a wide range of document types:
+
+    Plain Text & Code: .txt, .md (Markdown), .html, .htm
     Modern Office: .docx (Microsoft Word) and .odt (LibreOffice/OpenDocument)
     Legacy Office: .doc (Microsoft Word 97-2003)
-
+    Documents: .pdf (Portable Document Format)
+    🛠️ System Mode (-s): Adds support for .log, .conf, .ini, .yaml, .sh, and files with no extension (e.g., /etc/fstab).
 
 🛠️ Prerequisites & Dependencies
 
-Fedora Silverblue includes these tools by default. If you are running this on a minimal install of fedora install the following if not already installed:
+| Tool | Purpose | Fedora / Silverblue Command |
+| :--- | :--- | :--- |
+| **grep** | Core search engine (uses -E for regex) | Included |
+| **find** | Navigates directory structures | Included |
+| **unzip** | Reads XML from .docx and .odt files | `sudo dnf install unzip` |
+| **antiword** | Converts legacy .doc files to text | `sudo dnf install antiword` |
+| **pdftotext** | Converts .pdf files to searchable text | `sudo dnf install poppler-utils` |
 
-Tool	Purpose	Fedora/Silverblue Command
+    Note: On Fedora Silverblue, these tools are part of the base image. You can run DocSearchPro natively on the host without needing a Toolbox or layering additional packages.
 
-grep  - Core search engine (uses -E for extended regex)	Included in most linux distrobutions
-find  - Navigates directory structures	Included in most linux distrobutions
-unzip - Extracts and reads XML from .docx and .odt (included in 
+🚀 Usage
+
+Interactive Mode:
+Simply run the script. It will default to your $HOME directory and prompt you for a search term.
 ```bash
-sudo dnf install unzip
+docsearchpro
 ```
-
-antiword - Converts binary .doc files to searchable text
+System Search (Btrfs subvolumes, logs, etc):
+To search system configurations, use the -s (System) and -p (Partial match) flags.
 ```bash
-sudo dnf install antiword
+sudo docsearchpro /etc -s -p "subvol"
 ```
-
 
 
 🚀 Usage Instructions
-1. Installation
 
 Clone fedora-hub and make the script executable:
 ```bash
 git clone https://github.com/your-username/fedora-hub.git
 cd fedora-hub/silverblue/search
-chmod +x search_docs
+chmod +x DocSearchPro
 ```
-
-2. Running a Search
 
 Interactive Mode:
 Simply run the script. It will automatically default to your $HOME directory and prompt you for a keyword.
 ```bash
-./search_docs
+./DocSearchPro
 ```
 
+⌨️ Terminal Installation (Recommended)
+
+To run DocSearchPro from any directory without typing the full path, install it to your local bin and create a lowercase alias:
+bash
+
+1. Copy to your binary folder
+
+Local installation (no sudo):
+```bash
+mkdir -p ~/.local/bin
+cp DocSearchPro ~/.local/bin/
+```
+Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
+```bash
+ln -s ~/.local/bin/DocSearchPro ~/.local/bin/docsearchpro
+chmod +x ~/.local/bin/DocSearchPro
+```
+or
+
+System wide installation (requires sudo):
+```bash
+sudo mkdir -p /usr/local/bin/
+sudo cp ~/fedora-hub/silverblue/search/DocSearchPro /usr/local/bin/
+```
+Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
+```bash
+sudo ln -s /usr/local/bin/DocSearchPro /usr/local/bin/docsearchpro
+```
+
+2. Refresh your terminal
+hash -r
+
+
+3. Running a Search
 Manual Directory & Keyword:
 You can specify a directory such as Documents and a keyword via the command line to skip the prompts:
 ```bash
-./search_docs ~/Documents -k "kidneys"
+./DocSearchPro ~/Documents -k "kidneys"
 ```
 
-3. Search Options
+Search Options
 
-    -k [keyword]: Sets the search term via command line.
-    -p: Partial match. Use this if you want "kidney" to match "kidneys" or "kidney-stone."
-    -c: Case-sensitive. Use this for strict matching (e.g., "Steven" vs "steven").
+  -h, --help       Display this help message.
+  -k, --keyword    Specify keyword (useful if keyword starts with -).
+  -c, --case       Perform case-sensitive search.
+  -p, --partial    Allow partial word matches (e.g., 'steve' matches 'steven').
+  -s, --system     SYSTEM MODE: Search only configs, logs, scripts, and no-ext files.
+
+Examples:
+  docsearchpro 'steven'                   # Search home for 'steven'
+  docsearchpro ~/Documents 'report'       # Search specific folder for 'report'
+  docsearchpro -p 'trace elements'        # Partial match search in home
+  sudo docsearchpro /etc -s -p subvol     # System search in /etc for 'subvol'
+  docsearchpro /run/media/backup 'data'   # Search an external drive or mount
 
 📂 Why this is better for Silverblue
 
     Symlink Aware: Uses $HOME to correctly navigate the /var/home structure.
     Native Performance: Runs as a native host script without the overhead of a container or Flatpak.
-    Btrfs Optimized: Efficiently scans across Btrfs subvolumes on your physical dis
+    Btrfs Optimized: Efficiently scans across Btrfs subvolumes on your physical disk
 
 
 # 🖥️ Desktop Integration (GNOME Launcher) and Terminal
@@ -80,18 +128,18 @@ Clone fedora-hub if you have not already done so:
 git clone https://github.com/your-username/fedora-hub.git
 ```
 
-Place the script in a dedicated folder in your home directory:
+Place the script in /usr/local/bin/
 ```bash
-mkdir -p ~/.local/bin
-cp ~/fedora-hub/silverblue/search/DocSearchPro ~/.local/bin/
+sudo mkdir -p /usr/local/bin/
+sudo cp ~/fedora-hub/silverblue/search/DocSearchPro /usr/local/bin/
 ```
 Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
-```
-ln -s ~/.local/bin/DocSearchPro ~/.local/bin/docsearchpro
+```bash
+sudo ln -s /usr/local/bin/DocSearchPro /usr/local/bin/docsearchpro
 ```
 Ensure the script is executable
 ```bash
-chmod +x ~/.local/bin/DocSearchPro
+chmod +x /usr/local/bin/docsearchpro
 ```
 2. Create the Desktop Entry
 
@@ -137,9 +185,6 @@ How the search works in GNOME
     If you type "Doc", it will show up.
     If you type "Search", it will show up.
     If you type "Pro", it will show up.
-
-
-Note: This setup survives Fedora Silverblue system updates as all files reside within the user's /var/home directory.
 
 
 Enjoy 🚀📂🛠️✨
