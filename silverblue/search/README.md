@@ -64,9 +64,15 @@ bash
 1. Copy to your binary folder
 
 Local installation (no sudo):
+
+Clone fedora-hub to your home directory
+```bash
+git clone https://github.com/your-username/fedora-hub.git
+```
+Create bin if it does not exist and copy DocSearchPro to bin
 ```bash
 mkdir -p ~/.local/bin
-cp DocSearchPro ~/.local/bin/
+cp ~/fedora-hub/silverblue/search/DocSearchPro ~/.local/bin/
 ```
 Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
 ```bash
@@ -76,6 +82,12 @@ chmod +x ~/.local/bin/DocSearchPro
 or
 
 System wide installation (requires sudo):
+
+Clone fedora-hub to your home directory
+```bash
+git clone https://github.com/your-username/fedora-hub.git
+```
+Create bin if it does not exist and copy DocSearchPro to bin
 ```bash
 sudo mkdir -p /usr/local/bin/
 sudo cp ~/fedora-hub/silverblue/search/DocSearchPro /usr/local/bin/
@@ -83,6 +95,7 @@ sudo cp ~/fedora-hub/silverblue/search/DocSearchPro /usr/local/bin/
 Create a  symbolic link so as to allow launching script with the lower case name when using from the terminal
 ```bash
 sudo ln -s /usr/local/bin/DocSearchPro /usr/local/bin/docsearchpro
+chmod +x /usr/local/bin/DocSearchPro
 ```
 
 2. Refresh your terminal
