@@ -67,6 +67,7 @@ Local installation (no sudo):
 
 Clone fedora-hub to your home directory
 ```bash
+cd
 git clone https://github.com/your-username/fedora-hub.git
 ```
 Create bin if it does not exist and copy DocSearchPro to bin
@@ -85,6 +86,7 @@ System wide installation (requires sudo):
 
 Clone fedora-hub to your home directory
 ```bash
+cd
 git clone https://github.com/your-username/fedora-hub.git
 ```
 Create bin if it does not exist and copy DocSearchPro to bin
