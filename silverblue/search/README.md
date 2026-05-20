@@ -1,4 +1,4 @@
-# 🔍 DocSearch Pro (search_docs.sh)
+# 🔍 DocSearch Pro
 
 Overview
 
