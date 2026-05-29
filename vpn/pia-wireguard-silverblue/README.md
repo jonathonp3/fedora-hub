@@ -233,10 +233,15 @@ Example:
 ```bash
 jonathon ALL=(ALL) NOPASSWD: ALL
 ```
-Save and exit, then type exit to return to the host.
+Save and exit, then type 'exit' to return to the host.
 
 
 4. Deploy the Autostart Script
+
+ **Clone the repository if have not done so already:**
+```bash
+git clone https://github.com/jonathonp3/fedora-hub.git
+```
 
 Copy the script from the repository to your hidden .opt folder:
 ```bash
