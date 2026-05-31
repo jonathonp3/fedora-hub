@@ -1,0 +1,12 @@
+" Enable features for all users
+set nocompatible
+syntax on
+set termguicolors
+set background=dark
+
+" Set the global default theme
+colorscheme catppuccin
+
+" Quality of life settings
+set number
+set backspace=indent,eol,start
