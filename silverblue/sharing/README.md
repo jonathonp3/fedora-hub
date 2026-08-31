@@ -1,127 +1,24 @@
 # Persistent Host-to-VM Sharing (The SSHFS Method)
 
-This guide documents how to securely and persistently mount the **Fedora Silverblue** host home directory inside a **Fedora Workstation VM**. 
+This guide documents how to securely and persistently mount the **Fedora Silverblue** host home directory inside a **Fedora Silverblue VM**. 
 
 ## Why SSHFS over NFS/Samba?
 - **Bypasses the "Symlink Trap":** Silverblue uses a symlink for `/home` -> `/var/home`, which causes NFS to fail with "No such directory." SSHFS operates at the user level and handles this perfectly.
 - **Security:** Everything is encrypted via SSH (SFTP).
-- **Simplicity:** No need to manage complex firewall ports or SELinux booleans for Samba/NFS.
+- **Simplicity:** No need to manage firewall ports or SELinux booleans for Samba/NFS.
 
----
-
-## 🛠️ Setup Instructions
-
-1. Host Preparation (Luhman-16)
-
-##Enable Remote Login and open the SSH port:
-```bash
-# Enable SSH via Settings > Sharing > Remote Login OR:
-sudo systemctl enable --now sshd
-
-# Open Firewall
-sudo firewall-cmd --add-service=ssh --permanent
-sudo firewall-cmd --reload
-```
-
-2. VM Preparation (Workstation Client)
-
-Install the mounting tools and enable global permissions:
-
-Install the SSHFS driver
-```bash
-sudo dnf install sshfs
-```
-
-Enable global 'allow_other' permissions in FUSE
-
-(Includes the space to match Fedora's default formatting)
-```bash
-sudo sed -i 's/# user_allow_other/user_allow_other/' /etc/fuse.conf
-```
-
-Verify the change (should show 'user_allow_other' without a #)
-```bash
-cat /etc/fuse.conf
-```
-
-Create the mount point
-```bash
-mkdir -p ~/Luhman-16
-```
-
-3. Password-less Authentication
-Host (Luhman-16):
-Creates a new keypair (both private and public)
-```bash
-ssh-keygen -t ed25519
-```
-or 
-
-Generates a new SSH key pair in silent mode without prompts:
-```bash
-ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
-```
-Enable and start the sshd service:
-```bash
-sudo systemctl enable --now sshd
-```
-Allow SSH through firewall (firewalld) if it is not already allowed:
-```bash
-sudo firewall-cmd --permanent --add-service=ssh
-sudo firewall-cmd --reload
-```
-VM (Fedora Workstation)
-Generate a key in the VM and send it to the host:
-
-Creates a new keypair (both private and public)
-```bash
-ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
-```
-Copy public key to the host (Luhman-16).
-```bash
-ssh-copy-id jonathon@[HOST_IP]
-```
-4. Persistent Mount (/etc/fstab)
-
-Optional: Manual Connection Test
-Run this to verify the connection and permissions before editing fstab.
-If this works, your files will appear in the folder.
-```bash
-sshfs jonathon@[HOST_IP]:/var/home/jonathon/ /home/jonathon/Luhman-16 -o identityfile=/home/jonathon/.ssh/id_ed25519,allow_other,default_permissions
-```
-Check if files are visible
-```bash
-ls ~/Luhman-16
-```
-Unmount the test before proceeding to fstab setup
-```bash
-fusermount3 -u ~/Luhman-16
-```
-
-Edit fstab
-```bash
-sudo vim /etc/fstab
-```
-Add this line to the VM's /etc/fstab to enable Systemd Automount. This ensures the connection is only made when you click the folder, preventing boot delays.
-```bash
-jonathon@[HOST_IP]:/var/home/jonathon /home/jonathon/Luhman-16 fuse.sshfs noauto,x-systemd.automount,_netdev,reconnect,identityfile=/home/jonathon/.ssh/id_ed25519,allow_other,default_permissions 0 0
-```
-
-Tell systemd manager to stop, re-scan the entire system for changes, and "re-read" all configuration files.
-```bash
-sudo systemctl daemon-reload
-```
-
-In Fedora, systemd acts as the manager of the filesystem; running sudo systemctl daemon-reload activates a generator that scans your fstab and instantly creates background "virtual units" for your configuration. This applies your changes immediately, setting up a "listener" that waits to snap the connection into place the moment you access the folder.
-
-
-🖱️ Method 2: The Lightweight Nautilus Way (GUI Only)
+Method 1: The Lightweight Nautilus Way (GUI Only)
 
 If you prefer a pure graphical interface and don't want to use the terminal or edit system files, you can use the built-in Nautilus "Connect to Server" feature.
 
     Open Nautilus (Files).
     Click + Other Locations (or Network) in the sidebar.
-    In the Connect to Server address box, enter: sftp://192.168.50.100/var/home/jonathon
+    In the Connect to Server address box, enter: 
+   
+```bash
+sftp://192.0.2.10/var/home/jonathon
+```
+    
     Click Connect.
     Enter your Host username and password.
     Crucial Step: Select "Remember Forever" to ensure the connection stays password-less.
@@ -138,7 +35,164 @@ Even if you didn't create a key, Nautilus automatically creates the ~/.ssh/known
     ssh-rsa: The classic fingerprint.
     ecdsa-sha2: The standard secure fingerprint.
 
-Having these files means your VM and Host have officially "shaken hands" and trust each other! 🚀📁🛠️
+Having these files means your VM and Host have officially "shaken hands" and trust each other! 🚀📁🛠️ 
 
-This is a great "Alternative Path" for your guide. It makes your fedora-hub useful for both command-line experts and desktop-focused users. 
+
+Method 2 (Mounting Host from VM):
+
+The Fedora VM is the SSHFS client. The remote machine at `192.0.2.10` must be running an SSH server.
+
+1. Install SSHFS
+
+```bash
+sudo dnf install sshfs
+```
+
+2. Enable global 'allow_other' permissions in FUSE
+
+(Includes the space to match Fedora's default formatting)
+```bash
+sudo sed -i 's/# user_allow_other/user_allow_other/' /etc/fuse.conf
+```
+
+3. Create an SSH key
+
+Only run this if the key does not already exist:
+```bash
+ls -l ~/.ssh/id\_ed25519
+```
+
+If it does not exist:
+```bash
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id\_ed25519
+```
+
+# This creates:
+```bash
+~/.ssh/id\_ed25519       # private key
+~/.ssh/id\_ed25519.pub   # public key
+```
+
+4. Copy the public key to Luhman-16
+```bash
+ssh-copy-id -i ~/.ssh/id\_ed25519.pub jonathon@192.0.2.10
+```
+
+Test passwordless SSH access:
+```bash
+ssh -i ~/.ssh/id\_ed25519 jonathon@192.0.2.10
+```
+
+5. Create the mountpoint
+```bash
+mkdir -p /var/home/jonathon/Luhman-16
+```
+
+6. Manually test the SSHFS mount
+```bash
+sshfs jonathon@192.0.2.10:/var/home/jonathon \\
+  /var/home/jonathon/Luhman-16 \\
+  -o IdentityFile="\$HOME/.ssh/id\_ed25519",reconnect,ServerAliveInterval=15,ServerAliveCountMax=3
+```
+
+Verify it:
+```bash
+findmnt /var/home/jonathon/Luhman-16
+ls -la /var/home/jonathon/Luhman-16
+```
+
+Unmount the manual test:
+```bash
+fusermount3 -u /var/home/jonathon/Luhman-16
+```
+
+The allow_other option is not needed when only jonathon needs access. If other local users need access, add allow_other to the SSHFS options and enable it in /etc/fuse.conf:
+
+```bash
+sudo sed -i \\
+  '/^[[:space:]]\*#[[:space:]]\*user\_allow\_other/s/^[[:space:]]\*#[[:space:]]\*//' \\
+  /etc/fuse.conf
+```
+
+# User systemd Service
+
+7. Create the user-unit directory
+```bash
+mkdir -p ~/.config/systemd/user
+```
+
+8. Create the SSHFS service
+```bash
+vim ~/.config/systemd/user/Luhman-16-sshfs.service
+```
+
+Add:
+
+```bash
+[Unit]
+Description=SSHFS mount for Luhman-16
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/mkdir -p /var/home/jonathon/Luhman-16
+ExecStart=/usr/bin/sshfs -f jonathon@192.0.2.10:/var/home/jonathon /var/home/jonathon/Luhman-16 -o IdentityFile=%h/.ssh/id\_ed25519,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3
+ExecStop=/usr/bin/fusermount3 -u /var/home/jonathon/Luhman-16
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+9. Enable and start the service
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now Luhman-16-sshfs.service
+```
+
+Check the service:
+```bash
+systemctl --user status Luhman-16-sshfs.service --no-pager
+```
+
+View the service log:
+```bash
+journalctl --user -u Luhman-16-sshfs.service -b --no-pager
+```
+
+Check whether it is mounted:
+```bash
+findmnt /var/home/jonathon/Luhman-16
+```
+
+Service Management
+
+Restart:
+```bash
+systemctl --user restart Luhman-16-sshfs.service
+```
+
+Stop:
+```bash
+systemctl --user stop Luhman-16-sshfs.service
+```
+
+Start:
+```bash
+systemctl --user start Luhman-16-sshfs.service
+```
+
+Unmount manually after stopping the service:
+```bash
+systemctl --user stop Luhman-16-sshfs.service
+fusermount3 -u /var/home/jonathon/Luhman-16
+```
+
+If the service should start even when jonathon is not logged in:
+```bash
+sudo loginctl enable-linger jonathon
+```
 
