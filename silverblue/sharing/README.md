@@ -114,7 +114,7 @@ sudo sed -i \\
   /etc/fuse.conf
 ```
 
-# User systemd Service
+User systemd Service
 
 7. Create the user-unit directory
 ```bash
