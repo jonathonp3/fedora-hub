@@ -7,7 +7,7 @@ This guide documents how to securely and persistently mount the **Fedora Silverb
 - **Security:** Everything is encrypted via SSH (SFTP).
 - **Simplicity:** No need to manage firewall ports or SELinux booleans for Samba/NFS.
 
-Method 1: The Lightweight Nautilus Way (GUI Only)
+## Method 1: The Lightweight Nautilus Way (GUI Only)
 
 If you prefer a pure graphical interface and don't want to use the terminal or edit system files, you can use the built-in Nautilus "Connect to Server" feature.
 
@@ -38,7 +38,7 @@ Even if you didn't create a key, Nautilus automatically creates the ~/.ssh/known
 Having these files means your VM and Host have officially "shaken hands" and trust each other! 🚀📁🛠️ 
 
 
-Method 2 (Mounting Host from VM):
+## Method 2 (Mounting Host from VM):
 
 The Fedora VM is the SSHFS client. The remote machine at `192.0.2.10` must be running an SSH server.
 
@@ -67,7 +67,7 @@ If it does not exist:
 ssh-keygen -t ed25519 -N "" -f ~/.ssh/id\_ed25519
 ```
 
-# This creates:
+This creates:
 ```bash
 ~/.ssh/id\_ed25519       # private key
 ~/.ssh/id\_ed25519.pub   # public key
